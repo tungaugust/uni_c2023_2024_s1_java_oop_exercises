@@ -19,6 +19,8 @@ public class App {
     public static void main(String[] args) {
         /*
         * Bài 3.1. Thuật toán giải phương trình bậc hai một ẩn aX^2 + bX + c = 0
+        * Input: Hệ số a, b và c của phương trình bậc hai (tổng quát)
+        * Output: Nghiệm X (nghiệm kép), X1 và X2 (hai nghiệm phân biệt) của phương trình bậc hai
         * Bước 1: Tính Delta = b^2 - 4ac
         * Bước 2: Xét Delta
         *   + Delta < 0: Phương trình vô nghiệm
