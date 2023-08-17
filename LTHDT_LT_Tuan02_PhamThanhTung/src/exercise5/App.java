@@ -39,7 +39,7 @@ public class App {
         Scanner scanner = new Scanner(System.in);
         int sum;
         int n;
-        System.out.print("Nhập số nguyên n = ");
+
         n = Integer.valueOf(scanner.nextLine().trim());
         while (n > 0) {
             sum = 0;
