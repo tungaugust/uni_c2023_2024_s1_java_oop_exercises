@@ -13,7 +13,7 @@ package chapter01_02.exercise19;
  * @version: 1.0
  * @since: August 20, 2023
  */
-public class CountCharacterInString {
+public class CountCharactersInString {
     public static void main(String[] args) {
         char c = 'a';
         String s = "Java String";
