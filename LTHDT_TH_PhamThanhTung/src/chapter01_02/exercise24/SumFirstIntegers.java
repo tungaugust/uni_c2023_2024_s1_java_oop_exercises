@@ -10,7 +10,7 @@ package chapter01_02.exercise24;
 import java.util.Scanner;
 
 /**
- * Chương trình tính tổng N số nguyên (dương) đầu tiên
+ * Chương trình tính tổng các số nguyên tố nhỏ hơn N
  * @author: tungpt
  * @version: 1.0
  * @since: August 21, 2023
