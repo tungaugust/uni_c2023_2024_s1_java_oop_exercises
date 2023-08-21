@@ -28,7 +28,8 @@ public class PrintFirstFibonacciNumbers {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Nhập vào số số đầu tiên trong dãy Fibonacci: ");
         int n = Integer.valueOf(scanner.nextLine().trim());
-        if (n < 0) {
+        if (n <= 0) {
+            System.out.println("Cần nhập số nguyên dương.");
             System.exit(0);
         }
         int[] fibonacci = new int[n];
