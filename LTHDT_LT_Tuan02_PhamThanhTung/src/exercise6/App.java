@@ -24,7 +24,7 @@ public class App {
     static boolean isPrimeNumber(int n) {
         if (n <= 1) { return false;
         }
-        for (int i = 2; i < Math.sqrt(n); i++) {
+        for (int i = 2; i <= Math.sqrt(n); i++) {
             if ((n % i) == 0) { return false;
             }
         }
@@ -40,7 +40,7 @@ public class App {
          * Bước 2: Nếu n < 0 thì chương trình dừng
          * Bước 3: Nếu n = 0 hoặc n = 1 thì n không là số nguyên tố, dừng chương trình
          * Bước 4: Gán i := 2
-         * Bước 5: Xét điều kiện i < sqrt(n):
+         * Bước 5: Xét điều kiện i <= sqrt(n):
          *      + Nếu điều kiện đúng thì , sau đó đến Bước 6
          *      + Nếu điều kiện sai thì n là số nguyên tố, dừng chương trình
          * Bước 6: Xét n mod i = 0:
@@ -50,7 +50,7 @@ public class App {
          * */
 
         /*
-         * Bài 6.2. Chương trình tính tổng các số từ 1 đến n.
+         * Bài 6.2. Chương trình kiểm tra số nguyên tố.
          * */
         // tạo đối tượng Scanner cho việc nhập dữ liệu từ console
         Scanner scanner = new Scanner(System.in);
