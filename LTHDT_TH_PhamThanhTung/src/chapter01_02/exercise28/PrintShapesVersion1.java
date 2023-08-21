@@ -28,7 +28,7 @@ public class PrintShapesVersion1 {
             parity = 2; // chẵn
         }
 
-        System.out.println("Hình 1. Hình tam giá vuông cân có chiều dài cạnh góc vuông là " + side + "; hình rỗng.");
+        System.out.println("Hình 1. Hình tam giác vuông cân có chiều dài cạnh góc vuông là " + side + "; hình rỗng.");
         /* ---
         *
         * *
