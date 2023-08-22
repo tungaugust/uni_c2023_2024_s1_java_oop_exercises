@@ -71,14 +71,13 @@ public class App {
         // nhập chuỗi, chuỗi cắt tỉa chuỗi ở đầu và cuối, chuyển chuỗi thành số thực kiểu double.
         int newQuantity = Integer.valueOf(scanner.nextLine().trim());
 
-        // bước 1: Tính lượng điện đã tiêu thụ
         int consumedQuantity = newQuantity - oldQuantity;
         int originConsumedQuantity = consumedQuantity;
         if (consumedQuantity < 0) {
             System.out.println("Không thể tính lượng điện đã tiêu thụ.");
             System.exit(0);
         }
-        // bước 2: Xét consumedQuantity để chọn đơn giá unitPrice theo từng mức tương ứng bằng câu lệnh if
+
         int levelQuantity = 0;
         double amount = 0.0;
 
@@ -142,7 +141,7 @@ public class App {
                 default: break;
             }
         }
-        // bước 3
+
         System.out.printf("Tiền điện phải trả cho %d số điện là %.3f nghìn VND.\n", originConsumedQuantity, amount);
     }
 
