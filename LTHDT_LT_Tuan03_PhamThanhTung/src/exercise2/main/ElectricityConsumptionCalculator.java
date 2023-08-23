@@ -35,7 +35,7 @@ public class ElectricityConsumptionCalculator {
      * @param newQuantity: số diện tháng này (mới)
      * @return thành tiền số tiền phải trả
      */
-    static double totalAmount(int oldQuantity, int newQuantity){
+    public static double totalAmount(int oldQuantity, int newQuantity){
         int consumedQuantity = newQuantity - oldQuantity;
         if (consumedQuantity < 0) {
             throw new RuntimeException("Không thể thành tiền hoá đơn vì hiệu số âm.");
@@ -44,7 +44,7 @@ public class ElectricityConsumptionCalculator {
         double amount = 0.0;
         for (int i = 0; i < 6; i++) {
             switch (i) {
-                case 0: // 0-50: tiền đối đa = 83.9
+                case 0: // 0-50: tiền đối đa = 86400
                     if (consumedQuantity > 50) {
                         levelQuantity = 50;
                         consumedQuantity -= 50;
@@ -54,7 +54,7 @@ public class ElectricityConsumptionCalculator {
                     }
                     amount += (double) levelQuantity * 1728;
                     break;
-                case 1: // 51-100: tiền đối đa = 86.7
+                case 1: // 51-100: tiền đối đa = 89300
                     if (consumedQuantity > 50) {
                         levelQuantity = 50;
                         consumedQuantity -= 50;
@@ -64,7 +64,7 @@ public class ElectricityConsumptionCalculator {
                     }
                     amount += (double) levelQuantity * 1786;
                     break;
-                case 2: // 101-200: tiền đối đa = 201.4
+                case 2: // 101-200: tiền đối đa = 207400
                     if (consumedQuantity > 100) {
                         levelQuantity = 100;
                         consumedQuantity -= 100;
@@ -74,7 +74,7 @@ public class ElectricityConsumptionCalculator {
                     }
                     amount += (double) levelQuantity * 2074;
                     break;
-                case 3: // 201-300: tiền đối đa = 253.6
+                case 3: // 201-300: tiền đối đa = 261200
                     if (consumedQuantity > 100) {
                         levelQuantity = 100;
                         consumedQuantity -= 100;
@@ -84,7 +84,7 @@ public class ElectricityConsumptionCalculator {
                     }
                     amount += (double) levelQuantity * 2612;
                     break;
-                case 4: // 301-400: tiền đối đa = 283.4
+                case 4: // 301-400: tiền đối đa = 291900
                     if (consumedQuantity > 100) {
                         levelQuantity = 100;
                         consumedQuantity -= 100;
@@ -106,4 +106,30 @@ public class ElectricityConsumptionCalculator {
         double totalVATAmount = amount * VAT_RATE;
         return Math.ceil(amount + totalVATAmount);
     }
+
+    public static int getTienDien(int chiSoCu, int chiSoMoi){
+
+        final double THUE = 0.1; // Thuế VAT
+
+        int soKWh = chiSoMoi - chiSoCu; // Số kWh tiêu thụ
+        int tienDien = getSoKWh(soKWh, 400, Integer.MAX_VALUE) * 3015
+                + getSoKWh(soKWh, 300, 400) * 2919
+                + getSoKWh(soKWh, 200, 300) * 2612
+                + getSoKWh(soKWh, 100, 200) * 2074
+                + getSoKWh(soKWh, 50, 100) * 1786
+                + getSoKWh(soKWh, 0, 50) * 1728;
+
+        return tienDien + (int)Math.ceil(tienDien * THUE);
+    }
+
+    public static int getSoKWh(int soKWh, int soDau, int soCuoi){
+
+        if(soKWh < soDau)
+            return 0;
+        if(soKWh <= soCuoi)
+            return soKWh - soDau;
+
+        return soCuoi - soDau;
+    }
+
 }
