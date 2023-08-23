@@ -24,6 +24,9 @@ public class SinhVien {
     }
 
     public void setMaSinhVien(int maSinhVien) {
+        if (maSinhVien < 0) {
+            maSinhVien = 0;
+        }
         this.maSinhVien = maSinhVien;
     }
 
@@ -32,6 +35,9 @@ public class SinhVien {
     }
 
     public void setHoTen(String hoTen) {
+        if (hoTen.equals("")) {
+            hoTen = "Chưa xác định";
+        }
         this.hoTen = hoTen;
     }
 
@@ -40,6 +46,9 @@ public class SinhVien {
     }
 
     public void setDiemLT(float diemLT) {
+        if (diemLT < 0 || diemLT > 10) {
+            diemLT = 0.0f;
+        }
         this.diemLT = diemLT;
     }
 
@@ -48,6 +57,9 @@ public class SinhVien {
     }
 
     public void setDiemTH(float diemTH) {
+        if (diemTH < 0 || diemTH > 10) {
+            diemTH = 0.0f;
+        }
         this.diemTH = diemTH;
     }
 
