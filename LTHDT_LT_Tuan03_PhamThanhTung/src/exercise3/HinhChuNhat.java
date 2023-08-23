@@ -14,8 +14,8 @@ package exercise3;
  * @since: August 22, 2023
  */
 public class HinhChuNhat {
-    double chieuDai;
-    double chieuRong;
+    private double chieuDai;
+    private double chieuRong;
 
     public double getChieuDai() {
         return chieuDai;
