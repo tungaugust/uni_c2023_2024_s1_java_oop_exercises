@@ -107,6 +107,12 @@ public class ElectricityConsumptionCalculator {
         return Math.ceil(amount + totalVATAmount);
     }
 
+    /**
+     * Phương thức tính tiền điện
+     * @param chiSoCu
+     * @param chiSoMoi
+     * @return số tiền phải chi trả
+     */
     public static int getTienDien(int chiSoCu, int chiSoMoi){
 
         final double THUE = 0.1; // Thuế VAT

@@ -10,14 +10,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ElectricityConsumptionCalculatorTest {
     @ParameterizedTest
-    @DisplayName("Test 1.1")
+    @DisplayName("Test bài 2 - 1.1 ")
     @CsvFileSource(resources = "/exercise2/test/testcase.csv", delimiter = ',', numLinesToSkip = 1)
     void test1(int oldQuantity, int newQuantity, long amount) {
         assertEquals((double) amount, ElectricityConsumptionCalculator.totalAmount(oldQuantity, newQuantity));
     }
 
     @ParameterizedTest
-    @DisplayName("Test 1.2")
+    @DisplayName("Test bài 2 - 1.2")
     @CsvFileSource(resources = "/exercise2/test/testcase.csv", delimiter = ',', numLinesToSkip = 1)
     void test2(int oldQuantity, int newQuantity, int amount) {
         assertEquals(amount, ElectricityConsumptionCalculator.getTienDien(oldQuantity, newQuantity));
