@@ -8,7 +8,7 @@
 package chapter03.exercise03;
 
 /**
- * @description
+ * Lớp xe cộ
  * @author: tungpt
  * @version: 1.0
  * @since: August 23, 2023
@@ -26,6 +26,9 @@ public class Vehicle {
     }
 
     public void setBrand(String brand) {
+        if (brand.equals("")){
+            brand = "Unidentified!";
+        }
         this.brand = brand;
     }
 
@@ -34,6 +37,9 @@ public class Vehicle {
     }
 
     public void setCapacity(int capacity) {
+        if (capacity < 0) {
+            capacity = 0;
+        }
         this.capacity = capacity;
     }
 
@@ -42,6 +48,29 @@ public class Vehicle {
     }
 
     public void setUnitPrice(double unitPrice) {
+        if (unitPrice < 0) {
+            unitPrice = 0.0;
+        }
         this.unitPrice = unitPrice;
     }
+
+    public Vehicle() {
+        this.brand = "";
+        this.capacity = 0;
+        this.unitPrice = 0.0;
+    }
+
+    public Vehicle(String brand, int capacity, double unitPrice) {
+        setBrand(brand);
+        setCapacity(capacity);
+        setUnitPrice(unitPrice);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%-20s %15d %20.2f",
+                getBrand(), getCapacity(), getUnitPrice()
+        );
+    }
+
 }
