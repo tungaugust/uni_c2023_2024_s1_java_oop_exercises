@@ -26,6 +26,7 @@ public class App {
         HangThucPham hangThucPham3 = new HangThucPham("003", "Nuoc", 10000.0,
                 LocalDate.of(2017, 3, 1),
                 LocalDate.of(2018, 3, 1));
+        HangThucPham hangThucPham4 = new HangThucPham("004");
 
         String headerLine = String.format("%-15s | %-20s | %25s | %20s | %20s",
                 "Mã hàng", "Tên hàng", "Đơn giá", "Ngày sản xuất", "Ngày hết hạn"
@@ -40,6 +41,6 @@ public class App {
         System.out.println(hangThucPham1);
         System.out.println(hangThucPham2);
         System.out.println(hangThucPham3);
-
+        System.out.println(hangThucPham4);
     }
 }

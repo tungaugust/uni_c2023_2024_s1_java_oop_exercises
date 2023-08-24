@@ -90,8 +90,8 @@ public class HangThucPham {
      * @param maHang: mã hàng không được phép sửa, không được để trống, không phải là chuỗi rỗng
      */
     public HangThucPham(String maHang) {
-        setMaHang("Unidentified Code!");
-        setTenHang("Unidentified Name!");
+        setMaHang("chưa xác định");
+        setTenHang("chưa xác định");
         setDonGia(0.0);
         setNgaySanXuat(LocalDate.now());
         setNgayHetHan(LocalDate.now());
