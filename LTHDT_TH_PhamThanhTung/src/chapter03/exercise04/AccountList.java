@@ -32,8 +32,6 @@ public class AccountList {
     }
 
     public boolean add(Account account){
-//        n=5: 0 1 2 3 4
-//        c=4, 5
         if (this.count < this.accList.length) {
             this.accList[this.count] = account;
             this.count++;
@@ -69,7 +67,7 @@ public class AccountList {
         return this.count;
     }
 
-    public void printAccountList(){
+    public void printList(){
         for (int i = 0; i < this.count; i++) {
             System.out.printf("%-5d | %s\n", i+1, this.accList[i]);
         }

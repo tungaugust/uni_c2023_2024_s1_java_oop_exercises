@@ -118,7 +118,7 @@ public class AccountTest {
                             System.out.print(lineSymbol);
                         }
                         System.out.println();
-                        list.printAccountList();
+                        list.printList();
                     } else {
                         System.out.println(">>> Chưa có tài khoản nào trong danh sách.");
                     }
