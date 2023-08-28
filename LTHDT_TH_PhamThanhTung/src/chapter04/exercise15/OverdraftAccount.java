@@ -22,7 +22,7 @@ public class OverdraftAccount extends Account {
     public OverdraftAccount(String accID, double balance, double odLimit) {
         super(accID, balance);
         setOdLimit(odLimit);
-        setAvailableBalance(balance + odLimit);
+        setAvailableBalance(getBalance() + getOdLimit());
         this.overdraft = 0.0;
     }
 
@@ -31,6 +31,9 @@ public class OverdraftAccount extends Account {
     }
 
     private void setOdLimit(double odLimit) {
+        if (odLimit < 0) {
+            odLimit = 0.0;
+        }
         this.odLimit = odLimit;
     }
 
@@ -44,21 +47,24 @@ public class OverdraftAccount extends Account {
 
     @Override
     public boolean withdraw(double amount) {
-        if (amount < 0 || amount > this.availableBalance) {
+        if (amount < 0 || amount > getAvailableBalance()) {
             return false;
         }
-        double odDiff = this.odLimit - this.overdraft;  // số tiền còn có thể thấu chi
-        double balance = this.availableBalance - odDiff;    // số dư thực sự
-        setAvailableBalance(this.availableBalance - amount);
+        double balance = getBalance();
+        double available = getAvailableBalance();
         if (amount > balance) {
-            // tính lại khoảng thấu chi
-            this.overdraft = this.overdraft + (amount + balance);
+            super.withdraw(balance);
+            this.overdraft = this.overdraft + (amount - balance);
+        } else {
+            super.withdraw(amount);
         }
+        setAvailableBalance(available - amount);
         return true;
     }
 
     @Override
     public void deposit(double amount) {
+        super.deposit(amount);
         setAvailableBalance(getAvailableBalance() + amount);
     }
 }

@@ -34,11 +34,6 @@ public class Account {
         this.balance = (balance < 0) ? 0.0 : balance;
     }
 
-    /**
-     * Rút tiền
-     * @param amount: số tiền rút
-     * @return Trả về true khi rút tiền thành công, và ngược lại trả về false.
-     */
     public boolean withdraw(double amount) {
         double diff = getBalance() - amount;
         if (diff < 0) {
