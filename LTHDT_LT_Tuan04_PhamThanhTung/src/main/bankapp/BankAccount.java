@@ -5,7 +5,7 @@
  *  All rights reserved.
  */
 
-package exercise1;
+package main.bankapp;
 
 import java.text.DecimalFormat;
 
@@ -26,49 +26,64 @@ public class BankAccount {
         this.balance = 0.0;
     }
     public BankAccount(String accountNumber, String ownerName, double balance) {
-        this.accountNumber = accountNumber;
-        this.ownerName = ownerName;
+        setAccountNumber(accountNumber);
+        setOwnerName(ownerName);
+        if (balance < 0) {
+            throw new IllegalArgumentException("Balance must be greater than or equal to 0");
+        }
         this.balance = balance;
     }
 
     public void deposit(double amount) {
         if (amount <= 0) {
-            System.out.println("Không thể nạp tiền.");
-            return;
+            throw new IllegalArgumentException("Amount must be greater than 0");
         }
         this.balance = this.balance + amount;
-        System.out.println("Nạp tiền thành công.");
     }
 
     public void withdraw(double amount) {
         if (amount <= 0 || amount > this.balance) {
-            System.out.println("Không thể rút tiền.");
-            return;
+            throw new IllegalArgumentException("Amount must be greater than 0 and less than or equal to balance");
         }
         this.balance = this.balance - amount;
-        System.out.println("Rút tiền thành công.");
     }
 
     public void transfer(BankAccount other, double amount){
-        // Kiểm tra số tiền muốn chuyển
-        if (amount <= 0 || amount > this.balance) {
-            System.out.println("Không thể chuyển tiền.");
-            return;
-        }
         // Chuyển tiền (rút) từ tài khoản gửi
         withdraw(amount);
         // Nhận tiền (nạp) từ tài khoản nhận
         other.deposit(amount);
-        System.out.println("Chuyển tiền thành công.");
     }
 
     public double getBalance() {
         return balance;
     }
 
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public void setAccountNumber(String accountNumber) {
+        if (accountNumber == null || accountNumber.equals("")) {
+            throw new IllegalArgumentException("The account number must not be null");
+        }
+        this.accountNumber = accountNumber;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    public void setOwnerName(String ownerName) {
+        if (ownerName == null || ownerName.equals("")) {
+            throw new IllegalArgumentException("The owner name must not be null");
+        }
+        this.ownerName = ownerName;
+    }
+
     @Override
     public String toString() {
         DecimalFormat decimalFormat = new DecimalFormat("#,##0");
-        return String.format("%-20s %-25s %15s", this.accountNumber, this.ownerName, decimalFormat.format(this.balance));
+        return String.format("%-20s | %-25s | %15s", this.accountNumber, this.ownerName, decimalFormat.format(this.balance));
     }
 }
