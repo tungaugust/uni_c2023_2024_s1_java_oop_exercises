@@ -22,12 +22,12 @@ public abstract class HoaDonThuePhong {
     private String maPhong;
     private double donGia;
 
-    private static String MA_HOA_DON = "chưa xác định";
-    private static String MA_PHONG = "chưa xác định";
-    private static String TEN_KHACH_HANG = "chưa xác định";
+    private final static String MA_HOA_DON = "chưa xác định";
+    private final static String MA_PHONG = "chưa xác định";
+    private final static String TEN_KHACH_HANG = "chưa xác định";
 
-    public static String GIO = "phòng theo giờ";
-    public static String NGAY = "phòng theo ngày";
+    public final static String GIO = "phòng theo giờ";
+    public final static String NGAY = "phòng theo ngày";
 
     public String getMaHoaDon() {
         return maHoaDon;
