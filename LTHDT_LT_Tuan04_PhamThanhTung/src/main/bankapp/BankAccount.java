@@ -20,11 +20,19 @@ public class BankAccount {
     private String ownerName;
     private double balance;
 
+    /**
+     * Default constructor của lớp BankAccount
+     */
     public BankAccount() {
-        this.accountNumber = "0000-0000-0000";
-        this.ownerName = "No name";
-        this.balance = 0.0;
+        this("0000-0000-0000", "No name", 0.0);
     }
+
+    /**
+     * Constructor 3 tham số của lớp BankAccount
+     * @param accountNumber: Số tài khoản
+     * @param ownerName: Tên chủ tài khoản
+     * @param balance: Số dư, lớn hơn hoặc bằng 0
+     */
     public BankAccount(String accountNumber, String ownerName, double balance) {
         setAccountNumber(accountNumber);
         setOwnerName(ownerName);
@@ -34,6 +42,10 @@ public class BankAccount {
         this.balance = balance;
     }
 
+    /**
+     * Phương thức gửi tiền
+     * @param amount: số tiền gửi, lớn hơn 0
+     */
     public void deposit(double amount) {
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be greater than 0");
@@ -41,6 +53,10 @@ public class BankAccount {
         this.balance = this.balance + amount;
     }
 
+    /**
+     * Phương thức gửi tiền
+     * @param amount: số tiền gửi và lớn hơn 0
+     */
     public void withdraw(double amount) {
         if (amount <= 0 || amount > this.balance) {
             throw new IllegalArgumentException("Amount must be greater than 0 and less than or equal to balance");
@@ -48,6 +64,10 @@ public class BankAccount {
         this.balance = this.balance - amount;
     }
 
+    /**
+     * Phương thức chuyển tiền
+     * @param amount: số tiền chuyền
+     */
     public void transfer(BankAccount other, double amount){
         // Chuyển tiền (rút) từ tài khoản gửi
         withdraw(amount);
@@ -55,35 +75,59 @@ public class BankAccount {
         other.deposit(amount);
     }
 
+    /**
+     * Phương thức truy vấn số dư
+     * @return Trả về số dư
+     */
     public double getBalance() {
         return balance;
     }
 
+    /**
+     * Phương thức truy vấn số tài khoản
+     * @return Trả về số tài khoản
+     */
     public String getAccountNumber() {
         return accountNumber;
     }
 
+    /**
+     * Phương thức chỉnh sửa (đặt) số tài khoản
+     * @param accountNumber: Số tài khoản muốn đặt
+     */
     public void setAccountNumber(String accountNumber) {
-        if (accountNumber == null || accountNumber.equals("")) {
+        if (accountNumber == null || accountNumber.trim().equals("")) {
             throw new IllegalArgumentException("The account number must not be null");
         }
         this.accountNumber = accountNumber;
     }
 
+    /**
+     * Phương thức truy vấn tên chủ tài khoản
+     * @return Trả về tên chủ tài khoản
+     */
     public String getOwnerName() {
         return ownerName;
     }
 
+    /**
+     * Phương thức chỉnh sửa (đặt) tên chủ tài khoản
+     * @param ownerName: Tên chủ tài khoản muốn đặt
+     */
     public void setOwnerName(String ownerName) {
-        if (ownerName == null || ownerName.equals("")) {
+        if (ownerName == null || ownerName.trim().equals("")) {
             throw new IllegalArgumentException("The owner name must not be null");
         }
         this.ownerName = ownerName;
     }
 
+    /**
+     * Phương thức truy vấn thông tin tài khoản
+     * @return Trả về thông tin tài khoản dạng chuỗi
+     */
     @Override
     public String toString() {
-        DecimalFormat decimalFormat = new DecimalFormat("#,##0");
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.000");
         return String.format("%-20s | %-25s | %15s", this.accountNumber, this.ownerName, decimalFormat.format(this.balance));
     }
 }
