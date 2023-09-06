@@ -91,7 +91,7 @@ class BankTest {
     }
 
     @Test
-    void getAccounts() {
+    void testGetAccounts() {
         BankAccount[] expected = new BankAccount[5];
         expected[0] = new BankAccount("1001-5555-2010", "Peter Walker", 10000.0);
         expected[1] = new BankAccount("1001-5555-2020","James Edward", 5000.0);
