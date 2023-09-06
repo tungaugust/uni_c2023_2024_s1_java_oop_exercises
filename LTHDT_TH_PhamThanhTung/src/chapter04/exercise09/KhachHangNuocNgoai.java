@@ -27,7 +27,7 @@ public class KhachHangNuocNgoai extends KhachHang{
 
     @Override
     public double thanhTien() {
-        return 0;
+        return getDonGia() * getSoLuong();
     }
 
 }

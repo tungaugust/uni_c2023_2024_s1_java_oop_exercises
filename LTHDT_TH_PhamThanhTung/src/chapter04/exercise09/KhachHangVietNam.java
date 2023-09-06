@@ -16,9 +16,14 @@ import java.time.LocalDate;
  * @since: August 30, 2023
  */
 public class KhachHangVietNam extends KhachHang {
+    public static final String SINH_HOAT = "sinh hoạt";
+    public static final String KINH_DOANH = "kinh doanh";
+    public static final String SAN_XUAT = "sản xuất";
+
     private int dinhMuc;    // định mức tiêu thụ
 
     public KhachHangVietNam() {
+        super();
         this.dinhMuc = 0;
     }
 
@@ -29,7 +34,10 @@ public class KhachHangVietNam extends KhachHang {
 
     @Override
     public double thanhTien() {
-        return 0;
+        if (getSoLuong() <= dinhMuc) {
+            return getSoLuong() * getDonGia();
+        }
+        return getDonGia() * (dinhMuc + (getSoLuong() - dinhMuc)*2.5);
     }
 
     public int getDinhMuc() {

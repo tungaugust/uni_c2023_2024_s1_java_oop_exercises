@@ -7,7 +7,9 @@
 
 package chapter04.exercise09;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @description
@@ -16,20 +18,15 @@ import java.time.LocalDate;
  * @since: August 30, 2023
  */
 public abstract class KhachHang {
-    private String maKH;
-    private String hoTen;
+    private String maKH;    // mã khách hàng
+    private String hoTen;   // họ và tên
     private LocalDate ngayXuat; // ngày xuất hoá đơn
     private String loai;    // loại khách hàng với khách hàng Việt Nam, quốc tic đối với khách hàng nước ngoài
-    private double donGia;
+    private double donGia;  // đơn giá
     private int soLuong;    // số KW tiêu thụ
 
     public KhachHang() {
-        this.maKH = "chưa xác định";
-        this.hoTen = "chưa xác định";
-        this.ngayXuat = LocalDate.now();
-        this.loai = "chưa xác định";
-        this.donGia = 0.0;
-        this.soLuong = 0;
+        this("chưa xác định", "chưa xác định", LocalDate.now(),  "chưa xác định", 0.0, 0);
     }
 
     public KhachHang(String maKH, String hoTen, LocalDate ngayXuat, String loai, double donGia, int soLuong) {
@@ -89,5 +86,12 @@ public abstract class KhachHang {
 
     public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
+    }
+
+    @Override
+    public String toString() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+        return String.format("%-10s | %-25s | %15s | %15s | %15s | %10d", maKH, hoTen, ngayXuat.format(dateTimeFormatter), loai, decimalFormat.format(donGia), soLuong);
     }
 }
