@@ -27,18 +27,41 @@ public abstract class Employee {
     }
 
     public Employee(String id, String name, LocalDate dob) {
-        this.id = id;
-        this.name = name;
-        this.dob = dob;
+        setId(id);
+        setName(name);
+        setDob(dob);
     }
 
     public abstract double weeklyPay();
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public LocalDate getDob() {
+        return dob;
+    }
+
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
+    }
+
     @Override
     public String toString() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        DecimalFormat decimalFormat = new DecimalFormat("$ #,##0.00");
-        return String.format("Id: %s\nName: %s\nDate of birth: %s\nWeekly total salary: %s",
-                id, name, dob.format(dateTimeFormatter), decimalFormat.format(weeklyPay()));
+        return String.format("Id: %s\nName: %s\nDate of birth: %s",
+                id, name, dob.format(dateTimeFormatter));
     }
 }

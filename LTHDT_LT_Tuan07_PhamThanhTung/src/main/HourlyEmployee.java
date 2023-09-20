@@ -50,14 +50,17 @@ public class HourlyEmployee extends Employee {
 
     @Override
     public double weeklyPay() {
-        return 0;
+        if (this.hoursWorked > 40) {
+            return this.hourlyWage*(40 + 1.5*(this.hoursWorked - 40));
+        }
+        return this.hourlyWage*this.hoursWorked;
     }
 
     @Override
     public String toString() {
         DecimalFormat decimalFormat = new DecimalFormat("$ #,##0.00");
         String typeLine = "HourlyEmployee";
-        return String.format("Employee Type: %s\n%s\n==Salary details==\nHours worked: %d\nHourly wage: %s",
-                typeLine, super.toString(), hoursWorked, decimalFormat.format(hourlyWage));
+        return String.format("Employee Type: %s\n%s\nWeekly total salary: %s\n==Salary details==\nHours worked: %d\nHourly wage: %s",
+                typeLine, super.toString(), decimalFormat.format(weeklyPay()), hoursWorked, decimalFormat.format(hourlyWage));
     }
 }

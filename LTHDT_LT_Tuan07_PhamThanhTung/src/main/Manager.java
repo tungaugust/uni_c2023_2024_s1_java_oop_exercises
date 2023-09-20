@@ -7,7 +7,9 @@
 
 package main;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * @description
@@ -36,5 +38,17 @@ public class Manager extends SalariedEmployee{
         this.weeklyBonus = weeklyBonus;
     }
 
+    @Override
+    public double weeklyPay() {
+        return super.weeklyPay() + this.weeklyBonus;
+    }
 
+    @Override
+    public String toString() {
+        DecimalFormat decimalFormat = new DecimalFormat("$ #,##0.00");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String typeLine = "SalariedEmployee";
+        return String.format("Employee Type: %s\nId: %s\nName: %s\nDate of birth: %s\nWeekly total salary: %s\n==Salary details==\nAnnual salary: %s",
+                typeLine, getId(), getName(), getDob().format(dateTimeFormatter), decimalFormat.format(weeklyPay()), decimalFormat.format(annualSalary));
+    }
 }

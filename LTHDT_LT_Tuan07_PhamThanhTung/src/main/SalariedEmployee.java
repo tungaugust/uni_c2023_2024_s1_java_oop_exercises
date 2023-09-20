@@ -39,14 +39,14 @@ public class SalariedEmployee extends Employee{
 
     @Override
     public double weeklyPay() {
-        return 0;
+        return this.annualSalary/52;
     }
 
     @Override
     public String toString() {
         DecimalFormat decimalFormat = new DecimalFormat("$ #,##0.00");
         String typeLine = "SalariedEmployee";
-        return String.format("Employee Type: %s\n%s\n==Salary details==\nAnnual salary: %s",
-                typeLine, super.toString(), decimalFormat.format(annualSalary));
+        return String.format("Employee Type: %s\n%s\nWeekly total salary: %s\n==Salary details==\nAnnual salary: %s",
+                typeLine, super.toString(), decimalFormat.format(weeklyPay()), decimalFormat.format(annualSalary));
     }
 }
