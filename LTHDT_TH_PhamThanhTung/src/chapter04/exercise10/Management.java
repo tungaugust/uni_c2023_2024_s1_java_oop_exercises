@@ -58,6 +58,7 @@ public class Management {
         this.people[this.count - 1] = person;
     }
 
+
     public void remove(String name){
         this.people = Arrays.stream(this.people, 0, this.count)
                 .filter(o -> !o.getName().toLowerCase().equals(name.toLowerCase()))
