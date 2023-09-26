@@ -10,6 +10,8 @@ package main;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * @description
@@ -40,7 +42,7 @@ public class EmployeeList {
     public void addEmployee(Employee emp) {
         int index  = indexOfEmployee(emp.getId());
         if (index >= 0) {
-            throw new IllegalArgumentException("Nhân viên có số ID là \'" + emp.getId() + "\' đã tồn tại");
+            throw new IllegalArgumentException("Nhân viên có số ID là " + emp.getId() + " đã tồn tại");
         }
         if (this.employees[this.currentSize - 1] != null) {
             grow();
@@ -112,9 +114,9 @@ public class EmployeeList {
     }
     public double getWeeklyTotalSalaryOfManager(){
          return Arrays.stream(this.employees, 0, this.currentSize)
-                 .filter(emp -> emp instanceof Manager)
-                 .map(emp -> ((Manager) emp).weeklyPay())
-                 .reduce(0.0, Double::sum); // (a,b) -> a + b
+                 .filter(emp -> emp instanceof Manager).collect(Collectors.summingDouble(obj -> obj.weeklyPay()));
+//                 .map(emp -> ((Manager) emp).weeklyPay())
+//                 .reduce(0.0, Double::sum); // (a,b) -> a + b
     }
 
     public void updateHourlyWorked (String id, int newHour) {
@@ -123,12 +125,12 @@ public class EmployeeList {
         }
         int index = indexOfEmployee(id);
         if (index < 0) {
-            throw new IllegalArgumentException("Nhân viên có số ID là \'" + id + "\' đã tồn tại");
+            throw new IllegalArgumentException("Nhân viên có số ID là " + id + " không tồn tại");
         }
         if (this.employees[index] instanceof HourlyEmployee) {
             ((HourlyEmployee) this.employees[index]).setHoursWorked(newHour);
         } else {
-            throw new IllegalArgumentException("Nhân viên có số ID là \'" + id + "\' không là nhân viên theo giờ");
+            throw new IllegalArgumentException("Nhân viên có số ID là " + id + " không là nhân viên theo giờ");
         }
     }
 
