@@ -12,7 +12,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @description
@@ -31,7 +34,9 @@ public class PayrollApp {
         Employee employee7 = new Manager("S006","Oak, Morphia", LocalDate.of(1994,12,11), 50000.0, 50.0);
         Employee employee8 = new Manager("S008","Lemantine, Katherin", LocalDate.of(1995,9,10), 50000.0, 35.0);
         Employee employee9 = new Manager("S007","Parker, Martin", LocalDate.of(1998,7,6), 50000.0, 45.0);
-        Employee[] employees = {employee1, employee2, employee3, employee4, employee5, employee6, employee7, employee8, employee9};
+        Employee[] emps = {employee1, employee2, employee3, employee4, employee5, employee6, employee7, employee8, employee9};
+        Set<Employee> employees = new HashSet<>();
+        employees.addAll(Arrays.stream(emps).collect(Collectors.toList()));
         EmployeeList employeeList = new EmployeeList();
         employeeList.addAll(employees);
 
@@ -57,17 +62,19 @@ public class PayrollApp {
         while (flag){
             // Phần mô tả của Menu
             System.out.println("\n\n---------- EMPLOYEE MANAGEMENT SYSTEM ----------");
-            System.out.println("\t[ 1 ] Display all employees.");
-            System.out.println("\t[ 2 ] Add a new employee.");
-            System.out.println("\t[ 3 ] Search employee by id.");
-            System.out.println("\t[ 4 ] Sort by weekly salary.");
-            System.out.println("\t[ 5 ] Remove employee by id.");
-            System.out.println("\t[ 6 ] Update employee by id.");
-            System.out.println("\t[ 7 ] List hourly employees who work than 40 hours a week.");
-            System.out.println("\t[ 8 ] Print the total weekly salary of all managers.");
-            System.out.println("\t[ 9 ] Update hourly worked of hourly employee by id.");
-            System.out.println("\t[ 10 ] List of employees who are young managers (less than 30 years old).");
-            System.out.println("\t[ 0 ] Exit.");
+            System.out.println("\t[ 1 ] Display all employees");
+            System.out.println("\t[ 2 ] Add a new employee");
+            System.out.println("\t[ 3 ] Search employee by id");
+            System.out.println("\t[ 4 ] Sort by weekly salary");
+            System.out.println("\t[ 5 ] Remove employee by id");
+            System.out.println("\t[ 6 ] Update employee by id");
+            System.out.println("\t[ 7 ] List hourly employees who work than 40 hours a week");
+            System.out.println("\t[ 8 ] Print the total weekly salary of all managers");
+            System.out.println("\t[ 9 ] Update hourly worked of hourly employee by id");
+            System.out.println("\t[ 10 ] List of employees who are young managers (less than 30 years old)");
+            System.out.println("\t[ 11 ] This method returns a map of number of employees by year of birth");
+            System.out.println("\t[ 12 ] This method returns a map of total salary of each type of employee by total weekly salary");
+            System.out.println("\t[ 0 ] Exit");
             System.out.println("-------------------------------------------------");
             System.out.print("\nEnter your choice: ");
 
@@ -83,10 +90,10 @@ public class PayrollApp {
             switch (option) {
                 case 1:
                     System.out.println("[ 1 ] Display all employees");
-                    Arrays.stream(employeeList.getEmployees()).forEach(emp -> System.out.println("\n" + emp));
+                    employeeList.getEmployees().forEach(emp -> System.out.println("\n" + emp));
                     break;
                 case 2:
-                    System.out.println("[ 2 ] Add a new employee.");
+                    System.out.println("[ 2 ] Add a new employee");
                     System.out.print("Enter 1, 2 or 3 to choice employee type (1-Hourly employee (default); 2-Salaried employee; 3-Manager): ");
                     try {
                         type = Integer.valueOf(scanner.nextLine().trim());
@@ -144,14 +151,14 @@ public class PayrollApp {
                             employee = new HourlyEmployee(id, name, dob, hoursWorked, hourlyWage);
                             break;
                     }
-                    try {
-                        employeeList.addEmployee(employee);
-                    } catch (IllegalArgumentException e) {
-                        System.out.println(e.getMessage());
+                    if (employeeList.addEmployee(employee)) {
+                        System.out.println("Thêm thành công một nhân viên");
+                    } else {
+                        System.out.println("Thêm không thành công");
                     }
                     break;
                 case 3:
-                    System.out.println("[ 3 ] Search employee by id.");
+                    System.out.println("[ 3 ] Search employee by id");
                     System.out.print("Enter id: ");
                     id = scanner.nextLine().trim();
                     employee = employeeList.searchEmployeeById(id);
@@ -162,17 +169,23 @@ public class PayrollApp {
                     }
                     break;
                 case 4:
-                    System.out.println("[ 4 ] Sort by weekly salary.");
-                    employeeList.sortByWeeklySalary();
+                    System.out.println("[ 4 ] Sort by weekly salary");
+                    for (Employee emp : employeeList.sortByWeeklySalary()) {
+                        System.out.println(emp);
+                    }
                     break;
                 case 5:
                     System.out.println("[ 5 ] Remove employee by id.");
                     System.out.print("Enter id: ");
                     id = scanner.nextLine().trim();
-                    employeeList.removeEmployee(id);
+                    if (employeeList.removeEmployee(id)) {
+                        System.out.println("Xoá thành công một nhân viên");
+                    } else {
+                        System.out.println("Xoá không thành công");
+                    }
                     break;
                 case 6:
-                    System.out.println("[ 6 ] Update employee by id.");
+                    System.out.println("[ 6 ] Update employee by id");
                     System.out.print("Enter 1, 2 or 3 to choice employee type (1-Hourly employee (default); 2-Salaried employee; 3-Manager): ");
                     try {
                         type = Integer.valueOf(scanner.nextLine().trim());
@@ -230,22 +243,22 @@ public class PayrollApp {
                             employee = new HourlyEmployee(id, name, dob, hoursWorked, hourlyWage);
                             break;
                     }
-                    try {
-                        employeeList.updateEmployee(employee);
-                    } catch (IllegalArgumentException e) {
-                        System.out.println(e.getMessage());
+                    if (employeeList.updateEmployee(employee)) {
+                        System.out.println("Cập nhật thành công");
+                    } else {
+                        System.out.println("Cập nhật không thành công");
                     }
                     break;
                 case 7:
-                    System.out.println("[ 7 ] List hourly employees who work than 40 hours a week.");
-                    Arrays.stream(employeeList.getHourlyEmpsWorkMoreThan40()).forEach(emp -> System.out.println("\n" + emp));
+                    System.out.println("[ 7 ] List hourly employees who work than 40 hours a week");
+                    employeeList.getHourlyEmpsWorkMoreThan40().forEach(emp -> System.out.println("\n" + emp));
                     break;
                 case 8:
-                    System.out.println("[ 8 ] Print the total weekly salary of all managers.");
+                    System.out.println("[ 8 ] Print the total weekly salary of all managers");
                     System.out.println("Total: " + decimalFormat.format(employeeList.getYoungEmployeesAsManagers()));
                     break;
                 case 9:
-                    System.out.println("[ 9 ] Update hourly worked of hourly employee by id.");
+                    System.out.println("[ 9 ] Update hourly worked of hourly employee by id");
                     System.out.print("Enter id: ");
                     id = scanner.nextLine().trim();
                     int newHour;
@@ -262,8 +275,20 @@ public class PayrollApp {
                     }
                     break;
                 case 10:
-                    System.out.println("[ 10 ] List of employees who are young managers (less than 30 years old).");
-                    Arrays.stream(employeeList.getYoungEmployeesAsManagers()).forEach(emp -> System.out.println("\n" + emp));
+                    System.out.println("[ 10 ] List of employees who are young managers (less than 30 years old)");
+                    employeeList.getYoungEmployeesAsManagers().forEach(emp -> System.out.println("\n" + emp));
+                    break;
+                case 11:
+                    System.out.println("[ 11 ] This method returns a map of number of employees by year of birth");
+                    employeeList.getNoOfEmployeesByYOB().forEach((k, v) ->
+                            System.out.printf("Year of birth: %d\tNumber of employees: %d\n", k, v)
+                    );
+                    break;
+                case 12:
+                    System.out.println("[ 12 ] This method returns a map of total salary of each type of employee by total weekly salary");
+                    employeeList.getTotalWeeklySalary().forEach((k, v) ->
+                            System.out.printf("Type of emplopyee: %s\tTotal weekly salary: $ %,.2f\n", k, v)
+                    );
                     break;
                 case 0:
                     System.out.println("[ 0 ] Exit.");

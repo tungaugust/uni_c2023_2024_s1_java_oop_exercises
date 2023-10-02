@@ -10,6 +10,7 @@ package main;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /**
  * @description
@@ -63,5 +64,18 @@ public abstract class Employee {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return String.format("Id: %s\nName: %s\nDate of birth: %s",
                 id, name, dob.format(dateTimeFormatter));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Employee)) return false;
+        Employee employee = (Employee) o;
+        return this.id.equalsIgnoreCase(employee.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

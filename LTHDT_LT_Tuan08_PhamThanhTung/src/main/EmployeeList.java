@@ -8,8 +8,8 @@
 package main;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -20,124 +20,168 @@ import java.util.stream.Collectors;
  * @since: September 19, 2023
  */
 public class EmployeeList {
-    private int currentSize;
-    private Employee[] employees;
+    private Set<Employee> employees;
 
+    // Default constructor
     public EmployeeList() {
-        this(10);
+        this.employees = new HashSet<>();
     }
 
-    public EmployeeList(int size) {
-        if (size <= 0) {
-            size = 10;
-        }
-        this.currentSize = size;
-        this.employees = new Employee[this.currentSize];
+    // Trả về danh sách toàn bộ các nhân viên
+    public Set<Employee> getEmployees() {
+        return this.employees;
     }
 
-    public Employee[] getEmployees() {
-        return Arrays.stream(this.employees, 0, this.currentSize).filter(emp -> emp != null).toArray(x -> new Employee[x]);
+    // Thêm 1 nhân viên vào danh sách, thêm không trùng mã số nhân viên
+    public boolean addEmployee(Employee emp) {
+        if (employees.contains(emp)) {
+            return false;
+        }
+        this.employees.add(emp);
+        return true;
     }
 
-    public void addEmployee(Employee emp) {
-        int index  = indexOfEmployee(emp.getId());
-        if (index >= 0) {
-            throw new IllegalArgumentException("Nhân viên có số ID là " + emp.getId() + " đã tồn tại");
-        }
-        if (this.employees[this.currentSize - 1] != null) {
-            grow();
-        }
-        for (int i = 0; i < this.currentSize; i++) {
-            if (this.employees[i] == null){
-                this.employees[i] = emp;
-                break;
-            }
-        }
-    }
-    public void addAll(Employee[] emps){
-        for (int i = 0; i < emps.length; i++) {
-            try {
-                addEmployee(emps[i]);
-            } catch (IllegalArgumentException e){}
-        }
+    // Thêm một danh sách các nhân viên mới vào danh sách có trước, vẫn đảm bảo không bị trùng mã số nhân viên
+    public void addAll(Set<Employee> emps){
+        emps.forEach(o -> addEmployee(o));
     }
 
-    private int indexOfEmployee(String id) {
-        for (int i = 0; i < this.currentSize; i++) {
-            if (this.employees[i] == null) {
-                break;
-            }
-            if (this.employees[i].getId().equals(id)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
+    // Tìm kiếm nhân viên khi biết mã số. Trả về null, nếu không tìm thấy
     public Employee searchEmployeeById(String id) {
-        int index = indexOfEmployee(id);
-        if (index < 0) {
-            return null;
+        return this.employees.stream()
+                .filter(o -> o.getId().equalsIgnoreCase(id))
+                .findFirst()
+                .orElse(null);
+    }
+
+    // Sắp xếp danh sách nhân viên theo lương tuần tăng dần, trả về danh sách sau khi sắp xếp
+    public List<Employee> sortByWeeklySalary() {
+        return this.employees.stream()
+                .sorted(Comparator.comparing(Employee::weeklyPay))
+                .collect(Collectors.toCollection(
+                        () -> new ArrayList<>()
+                ));
+    }
+
+    // Trích ra năm sinh của nhân viên, kết quả không trùng và sắp xếp giảm dần
+    public Set<Integer> getYOBSet(){
+        return this.employees.stream()
+                .map(o -> o.getDob().getYear())
+                .collect(Collectors.toCollection(
+                        () -> new TreeSet<>()
+                )).descendingSet();
+    }
+
+    // Xóa 1 nhân viên khi biết mã số
+    public boolean removeEmployee(String id){
+        Employee employee = searchEmployeeById(id);
+        if (employee == null) {
+            return false;
         }
-        return this.employees[index];
+//        this.employees = this.employees.stream()
+//                .filter(o -> !o.getId().equalsIgnoreCase(id))
+//                .collect(Collectors.toCollection(
+//                        () -> new HashSet<>()
+//                ));
+        this.employees.remove(employee);
+        return true;
     }
 
-    private void grow(){
-        int newLength = (int) Math.ceil(this.currentSize*1.5);
-        this.employees = Arrays.copyOf(this.employees, newLength);
-        this.currentSize = newLength;
-    }
-
-    public void sortByWeeklySalary() {
-        Arrays.sort(this.employees, Comparator.comparing(Employee::weeklyPay));
-    }
-
-    public void removeEmployee(String id){
-        Employee[] filterd = Arrays.stream(this.employees, 0, this.currentSize)
-                .filter(emp -> !emp.getId().equals(id))
-                .toArray(x -> new Employee[x]);
-        this.employees = Arrays.copyOf(filterd, this.currentSize);
-    }
-
-    public void updateEmployee(Employee newInfor) {
-        int index = indexOfEmployee(newInfor.getId());
-        if (index < 0) {
-            throw new IllegalArgumentException("Nhân viên có số ID là \'" + newInfor.getId() + "\' đã tồn tại");
+    // Cập nhật thông tin của nhân viên khi biết mã số (dùng chung 1 phương thức cho cả 3 loại nhân viên)
+    public boolean updateEmployee(Employee newInfor) {
+        if (this.employees.contains(newInfor)
+                && searchEmployeeById(newInfor.getId()).getClass() == newInfor.getClass()) {
+            removeEmployee(newInfor.getId());
+            addEmployee(newInfor);
+            return true;
         }
-        this.employees[index] = newInfor;
+        return false;
     }
 
-    public Employee[] getHourlyEmpsWorkMoreThan40(){
-        return Arrays.stream(this.employees, 0, this.currentSize)
-                .filter(emp -> (emp instanceof HourlyEmployee) && ((HourlyEmployee) emp).getHoursWorked() > 40)
-                .toArray(x -> new Employee[x]);
+    // Trả về danh sách các nhân viên là nhân viên theo giờ và làm việc hơn 40 giờ một tuần
+    public Set<Employee> getHourlyEmpsWorkMoreThan40(){
+        return this.employees.stream()
+                .filter(o -> (o instanceof HourlyEmployee) && ((HourlyEmployee) o).getHoursWorked() > 40)
+                .collect(Collectors.toCollection(
+                        () -> new HashSet<>()
+                ));
     }
+
+    // Trả về tổng lương hàng tuần của tất cả các nhân viên là người quản lý
     public double getWeeklyTotalSalaryOfManager(){
-         return Arrays.stream(this.employees, 0, this.currentSize)
-                 .filter(emp -> emp instanceof Manager).collect(Collectors.summingDouble(obj -> obj.weeklyPay()));
+         return this.employees.stream()
+                 .filter(o -> o instanceof Manager)
+                 .collect(Collectors.summingDouble(
+                         o -> o.weeklyPay()
+                 ));
 //                 .map(emp -> ((Manager) emp).weeklyPay())
 //                 .reduce(0.0, Double::sum); // (a,b) -> a + b
     }
 
-    public void updateHourlyWorked (String id, int newHour) {
+    // Cập nhật giờ làm việc của một nhân viên theo giờ khi biết mã số.
+    // Ném lỗi nếu giờ làm việc mới nhỏ hơn 0, hoặc nếu mã nhân viên không tồn tại,
+    // hoặc nhân viên không phải là nhân viên theo giờ
+    public void updateHourlyWorked(String id, int newHour) {
         if (newHour < 0) {
             throw new IllegalArgumentException("Giờ làm việc không thể nhỏ hơn 0");
         }
-        int index = indexOfEmployee(id);
-        if (index < 0) {
+        Employee employee = searchEmployeeById(id);
+        if (employee == null) {
             throw new IllegalArgumentException("Nhân viên có số ID là " + id + " không tồn tại");
         }
-        if (this.employees[index] instanceof HourlyEmployee) {
-            ((HourlyEmployee) this.employees[index]).setHoursWorked(newHour);
+        if (employee instanceof HourlyEmployee) {
+            ((HourlyEmployee) employee).setHoursWorked(newHour);
         } else {
             throw new IllegalArgumentException("Nhân viên có số ID là " + id + " không là nhân viên theo giờ");
         }
     }
 
-    public Employee[] getYoungEmployeesAsManagers(){
-        return Arrays.stream(this.employees, 0, this.currentSize)
-                .filter(emp -> (emp instanceof Manager)
-                        && (LocalDate.now().getYear() - emp.getDob().getYear() < 30))
-                .toArray(x -> new Employee[x]);
+    // Trả về danh sách nhân viên trẻ làm quản lý (có tuổi < 30, tuổi = năm hiện tại – năm sinh)
+    public Set<Employee> getYoungEmployeesAsManagers(){
+        return this.employees.stream()
+                .filter(o -> (o instanceof Manager)
+                        && (LocalDate.now().getYear() - o.getDob().getYear()) < 30)
+                .collect(Collectors.toCollection(
+                        () -> new HashSet<>()
+                ));
+    }
+
+    // Thống kê số nhân viên theo năm sinh
+    public Map<Integer, Long> getNoOfEmployeesByYOB() {
+        return this.employees.stream()
+                .map(o -> o.getDob().getYear())
+                .collect(Collectors.groupingBy(o -> o, Collectors.counting()))
+                .entrySet().stream()
+                .sorted(Comparator.comparing(Map.Entry::getKey))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (oldObj, newObj) -> newObj,
+                        TreeMap::new
+                ));
+    }
+    // Thống kê tổng tiền lương của từng loại nhân viên, kết quả sắp xếp theo tiền lương
+    public  Map<String, Double> getTotalWeeklySalary(){
+        return this.employees.stream()
+                .collect(Collectors.groupingBy(o -> o.getClass(),
+                        Collectors.summingDouble(Employee::weeklyPay)))
+                .entrySet().stream()
+                .sorted(Comparator.comparing(Map.Entry::getValue))
+                .collect(Collectors.toMap(
+                        o -> {
+                            if (o.getKey() == HourlyEmployee.class) {
+                                return "Hourly Employee";
+                            } else if (o.getKey() == SalariedEmployee.class) {
+                                return "Salaried Employee";
+                            } else if (o.getKey() == Manager.class){
+                                return "Manager";
+                            } else {
+                                return "";
+                            }
+                        },
+                        o -> o.getValue(),
+                        (oldObj, newObj) -> newObj,
+                        TreeMap::new
+                ));
     }
 }

@@ -9,6 +9,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,13 +31,16 @@ class EmployeeListTest {
         employee7 = new Manager("S006","Oak, Morphia", LocalDate.of(1994,12,11), 52000.0, 50.0);
         employee8 = new Manager("S008","Lemantine, Katherin", LocalDate.of(1995,9,10), 52000.0, 35.0);
         employee9 = new Manager("S007","Parker, Martin", LocalDate.of(1998,7,6), 52000.0, 45.0);
-        Employee[] employees = {employee1, employee2, employee3, employee4, employee5, employee6, employee7, employee8, employee9};
+        Employee[] emps = {employee1, employee2, employee3, employee4, employee5, employee6, employee7, employee8, employee9};
+        Set<Employee> employees = new HashSet<>();
+        employees.addAll(Arrays.stream(emps).collect(Collectors.toList()));
+        EmployeeList employeeList = new EmployeeList();
         list.addAll(employees);
     }
 
     @AfterEach
     void tearDown() {
-        Arrays.stream(list.getEmployees()).forEach(obj -> obj = null);
+        list.getEmployees().forEach(obj -> obj = null);
         list = null;
     }
 
