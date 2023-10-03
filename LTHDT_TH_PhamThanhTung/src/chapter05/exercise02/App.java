@@ -44,9 +44,19 @@ public class App {
         int option; // tuỳ chọn
         String input; // chuỗi tuỳ chọn đầu vào
 
+        Phong phong = null;
+        int type;
+        String maPhong;
+        String dayNha;
+        double dienTich;
+        int soLuongBongDen;
+        boolean coThietBi = false;
+        int soLuongMayTinh;
+
+
         while (flag) {
             // Phần mô tả của Menu
-            System.out.println("\n\n---------- TRUE LOVE COMPANY ----------");
+            System.out.println("\n\n---------- QUAN LY PHONG HOC ----------");
             System.out.println("\t[ 1 ] Thêm một phòng học vào danh sách");
             System.out.println("\t[ 2 ] Tìm kiếm một phòng học nào đó khi biết mã phòng");
             System.out.println("\t[ 3 ] In toàn bộ danh sách các phòng học");
@@ -72,49 +82,125 @@ public class App {
             switch (option){
                 case 1:
                     System.out.println("[ 1 ] Thêm một phòng học vào danh sách");
-                    System.out.println("Nhân viên được chọn: " );
+                    System.out.print("Nhập 1, 2 hoặc 3 để chọn loại phòng cần thêm (1-Phòng lý thuyết (mặc định); 2-Phòng máy tính; 3-Phòng thí nghiệm): ");
+                    try {
+                        type = Integer.valueOf(scanner.nextLine().trim());
+                    } catch (NumberFormatException e) {
+                        type = 1;
+                    }
+                    System.out.print("Nhập mã phòng: " );
+                    maPhong = scanner.nextLine().trim();
+                    System.out.print("Nhập tên dãy nhà: " );
+                    dayNha = scanner.nextLine().trim();
+                    System.out.print("Nhập diện tích (m^2): " );
+                    try {
+                        dienTich = Double.valueOf(scanner.nextLine().trim());
+                    } catch (NumberFormatException e) {
+                        dienTich = 0.0;
+                    }
+                    System.out.print("Nhập số lượng bóng đèn: " );
+                    try {
+                        soLuongBongDen = Integer.valueOf(scanner.nextLine().trim());
+                    } catch (NumberFormatException e) {
+                        soLuongBongDen = 0;
+                    }
+                    switch (type){
+                        case 2:
+                            System.out.print("Nhập số lượng máy tính: " );
+                            try {
+                                soLuongMayTinh = Integer.valueOf(scanner.nextLine().trim());
+                            } catch (NumberFormatException e) {
+                                soLuongMayTinh = 0;
+                            }
+                            phong = new PhongMayTinh(maPhong, dayNha, dienTich, soLuongBongDen, soLuongMayTinh);
+                            break;
+                        case 3:
+                            System.out.print("Phòng có bồn rửa tay hay không? (C-Nếu có; K-Nếu không có (mặc định)): " );
+                            input = scanner.nextLine().trim();
+                            if (input.equalsIgnoreCase("C")) {
+                                coThietBi = true;
+                            }
+                            phong = new PhongThiNghiem(maPhong, dayNha, dienTich, soLuongBongDen, coThietBi);
+                            break;
+                        default:
+                            System.out.print("Phòng có máy chiếu hay không? (C-Nếu có; K-Nếu không có (mặc định)): " );
+                            input = scanner.nextLine().trim();
+                            if (input.equalsIgnoreCase("C")) {
+                                coThietBi = true;
+                            }
+                            phong = new PhongLyThuyet(maPhong, dayNha, dienTich, soLuongBongDen, coThietBi);
+                            break;
+                    }
+                    if (danhSachPhong.themPhong(phong)){
+                        System.out.println("Thêm phòng thành công");
+                    } else {
+                        System.out.println("Thêm phòng không thành công");
+                    }
                     break;
                 case 2:
                     System.out.println("[ 2 ] Tìm kiếm một phòng học nào đó khi biết mã phòng");
-                    System.out.println("Tên ngẫu nhiên được chọn cho sản phẩm mới: ");
+                    System.out.print("Nhập mã phòng muốn tìm: ");
+                    maPhong = scanner.nextLine().trim();
+                    phong = danhSachPhong.timPhongTheoMaPhong(maPhong);
+                    if (phong == null){
+                        System.out.println("Không tìm thấy phòng với mã phòng " + maPhong);
+                    } else {
+                        System.out.println(phong);
+                    }
                     break;
                 case 3:
-                    System.out.println("[ 3 ] Đặt tên sản phẩm mới theo tên phổ biến của tất cả nhân viên.");
-                    System.out.println("Tên phổ biến được chọn để đặt tên cho sản phẩm mới: " );
+                    System.out.println("[ 3 ] In toàn bộ danh sách các phòng học");
+                    danhSachPhong.inDanhSachTatCaPhong();
                     break;
                 case 4:
-                    System.out.println("[ 4 ] Đăng kí đi du lịch cho nhân viên.");
-                    System.out.print("Nhập mã nhân viên đăng kí đi du lịch: ");
-                    input = scanner.nextLine().trim();
-
+                    System.out.println("[ 4 ] In danh sách các phòng học đạt chuẩn");
+                    danhSachPhong.inDanhSachCacPhongDatChuan();
                     break;
                 case 5:
-                    System.out.println("[ 5 ] Sắp xếp danh sách khách hàng với thứ tự tăng dần theo doanh số.");
-
+                    System.out.println("[ 5 ] Sắp xếp danh sách tăng dần theo cột dãy nhà");
+                    danhSachPhong.sapXepDanhSachTheoDayNha();
                     break;
                 case 6:
-                    System.out.println("[ 6 ] In ra danh sách nhân viên.");
-
+                    System.out.println("[ 6 ] Sắp xếp danh sách giảm dần theo cột diện tích");
+                    danhSachPhong.sapXepDanhSachGiamDanTheoDienTich();
                     break;
                 case 7:
-                    System.out.println("[ 7 ] In ra danh sách khách hàng.");
-
+                    System.out.println("[ 7 ] Sắp xếp danh sách tăng dần theo cột số bóng đèn");
+                    danhSachPhong.sapXepDanhSachTheoBongDen();
                     break;
                 case 8:
-                    System.out.println("[ 8 ] In ra danh sách nhân viên đã đăng kí đi du lịch.");
-
+                    System.out.println("[ 8 ] Cập nhật số máy tính cho một phòng máy tính nào đó khi biết mã phòng");
+                    System.out.print("Nhập mã phòng máy tính: ");
+                    maPhong = scanner.nextLine().trim();
+                    System.out.print("Nhập số lượng máy tính muốn thay đổi: " );
+                    try {
+                        soLuongMayTinh = Integer.valueOf(scanner.nextLine().trim());
+                    } catch (NumberFormatException e) {
+                        soLuongMayTinh = 0;
+                    }
+                    if (danhSachPhong.capNhatSoMayTinh(maPhong, soLuongMayTinh)){
+                        System.out.println("Cập nhật thành công");
+                    } else {
+                        System.out.println("Cập nhật không thành công");
+                    }
                     break;
                 case 9:
-                    System.out.println("[ 8 ] In ra danh sách nhân viên đã đăng kí đi du lịch.");
-
+                    System.out.println("[ 9 ] Xóa một phòng học nào đó khi biết mã phòng");
+                    System.out.print("Nhập mã phòng muốn xoá: ");
+                    maPhong = scanner.nextLine().trim();
+                    if (danhSachPhong.xoaPhong(maPhong)){
+                        System.out.println("Xoá phòng thành công");
+                    } else {
+                        System.out.println("Xoá phòng không thành công");
+                    }
                     break;
                 case 10:
-                    System.out.println("[ 8 ] In ra danh sách nhân viên đã đăng kí đi du lịch.");
-
+                    System.out.println("[ 10 ] In ra tổng số phòng học");
+                    System.out.println("Tổng số phòng đang quản lý là " + danhSachPhong.tongSoPhong() + " phòng");
                     break;
                 case 11:
-                    System.out.println("[ 8 ] In ra danh sách nhân viên đã đăng kí đi du lịch.");
-
+                    System.out.println("[ 11 ] In danh sách các phòng máy có 60 máy");
+                    danhSachPhong.inDanhSachPhongMayTinhCo60May();
                     break;
                 case 0:
                     System.out.println("[ 0 ] Thoát MENU.");

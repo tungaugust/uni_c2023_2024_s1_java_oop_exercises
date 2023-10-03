@@ -73,6 +73,11 @@ public abstract class Phong {
 
     @Override
     public String toString() {
-        return String.format("Diện tích=%.2f | Số bóng đèn=%d", this.dienTich, this.soLuongBongDen);
+        return String.format("Mã phòng= %s | Dãy nhà=%s | Diện tích=%.2f | Số bóng đèn=%d",
+                this.maPhong,
+                this.dayNha,
+                this.dienTich,
+                this.soLuongBongDen
+        );
     }
 }
