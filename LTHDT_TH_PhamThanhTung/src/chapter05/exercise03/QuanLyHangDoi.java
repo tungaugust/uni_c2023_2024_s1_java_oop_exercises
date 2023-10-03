@@ -7,6 +7,7 @@
 
 package chapter05.exercise03;
 
+import java.awt.event.KeyAdapter;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -17,15 +18,28 @@ import java.util.LinkedList;
  * @since: October 03, 2023
  */
 public class QuanLyHangDoi {
-    private Deque<KhachHang> danhSachHangDoi;
+    private Deque<KhachHang> danhSachkhachHangChoMuaVe;
     private Deque<KhachHang> danhSachKhachHangDaMuaVe;
 
     public QuanLyHangDoi() {
-        this.danhSachHangDoi = new LinkedList<>();
+        this.danhSachkhachHangChoMuaVe = new LinkedList<>();
         this.danhSachKhachHangDaMuaVe = new LinkedList<>();
     }
 
     public void themKhachHang(KhachHang khachHang){
-        this.danhSachHangDoi.add(khachHang);
+        this.danhSachkhachHangChoMuaVe.add(khachHang);
     }
+
+    public boolean banVeChoKhachHang(String soCMND){
+
+        return false;
+    }
+
+    public KhachHang timKhachHangTheoSoCMND(String soCMND){
+        return this.danhSachkhachHangChoMuaVe.stream()
+                .filter(o -> o.getSoCMND().equalsIgnoreCase(soCMND))
+                .findFirst()
+                .orElse(null);
+    }
+
 }
