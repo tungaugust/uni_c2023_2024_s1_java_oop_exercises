@@ -27,6 +27,9 @@ public class DiaChi {
     }
 
     public void setDiaChi(String diaChi) {
+        if (diaChi.equalsIgnoreCase("")) {
+            diaChi = "unknown";
+        }
         this.diaChi = diaChi;
     }
 

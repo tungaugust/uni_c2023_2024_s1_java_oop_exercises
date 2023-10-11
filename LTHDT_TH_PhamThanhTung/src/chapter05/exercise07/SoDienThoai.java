@@ -31,6 +31,9 @@ public class SoDienThoai {
         if (this.soDienThoai.equalsIgnoreCase("")) {
             this.soDienThoai = "0001110000";
         }
+        if (!this.soDienThoai.startsWith("0")){
+            this.soDienThoai = "0" + this.soDienThoai;
+        }
     }
 
     @Override

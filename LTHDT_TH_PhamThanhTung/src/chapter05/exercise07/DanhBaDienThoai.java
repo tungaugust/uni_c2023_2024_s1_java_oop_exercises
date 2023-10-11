@@ -65,6 +65,6 @@ public class DanhBaDienThoai {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new))
                 .entrySet().stream()
                 .sorted(Comparator.comparing(o -> o.getValue().getDiaChi()))
-                .forEach(o -> System.out.println(o.getKey().getSoDienThoai() + ": " + o.getValue().getDiaChi()));
+                .forEach(o -> System.out.println(o.getValue().getDiaChi() + ": " + o.getKey().getSoDienThoai()));
     }
 }
