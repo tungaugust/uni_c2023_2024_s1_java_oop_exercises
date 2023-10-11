@@ -1,0 +1,2 @@
+Nội dung cần copy
+từ file nguồn sang file đích.
