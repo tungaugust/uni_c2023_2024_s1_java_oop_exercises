@@ -39,6 +39,7 @@ public class RandomSelection {
                 dataOut.writeDouble(number);
                 System.out.println("Ghi số double thứ " + (i + 1) + ": " + number);
             }
+            System.out.println();
             dataIn = new DataInputStream((new FileInputStream(filePath)));
             for (int i = 0; i < times; i++) {
                 number = dataIn.readDouble();
