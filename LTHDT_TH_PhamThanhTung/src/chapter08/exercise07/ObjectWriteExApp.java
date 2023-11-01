@@ -29,8 +29,8 @@ public class ObjectWriteExApp {
             // ghi đối tượng Date
             oStream.writeObject(new Date());
             System.out.println("Ghi 4 doi tuong vao tap tin Container.txt");
-        }catch(IOException e){
-            System.out.println(e.getMessage());
+        }catch(IOException ex){
+            ex.printStackTrace();
         } finally {
             oStream.close();
         }
