@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * @description
+ * Dùng BufferedReader đọc từng ký tự từ Console. Việc đọc kết thúc khi gặp dấu chấm (dấu chấm để kết thúc chương trình).
  * @author: tungpt
  * @version: 1.0
  * @since: November 01, 2023
@@ -25,7 +25,10 @@ public class ReadCharacterFromConsole {
             do {
                 c = (char) reader.read();
                 System.out.println("Character: " + c);
-            } while (c != '.');
+                if (c == '.'){
+                    break;
+                }
+            } while (true);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
